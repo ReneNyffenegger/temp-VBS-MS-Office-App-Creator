@@ -1,0 +1,38 @@
+<!--
+
+   vim: foldmethod=marker foldmarker={{{,}}}
+
+-->
+<job>
+<script language="VBScript" src="c:\users\r.nyffenegger\github\lib\VBS-MS-Office-App-Creator\create-MS-Office-app.vbs" />
+<script language="VBScript">
+
+
+   option explicit
+
+   if wscript.arguments.count < 1 then ' {{{
+      wscript.echo("run-VBA-in-new-app xyz.bas")
+      wscript.quit()
+    end if ' }}}
+
+   dim app
+   dim xls
+   set xls = createOfficeApp("excel", currentDir() & "created.xlsm")
+   if xls is nothing then ' {{{
+      wscript.echo("Could not create excel worksheet.")
+      wscript.quit(-1)
+   end if ' }}}
+
+   set app = xls.application
+
+   call insertModule(app, currentDir() & wscript.arguments.unNamed(0), "funcs", 1)
+
+   call app.run("main")
+
+   xls.saved = true
+
+   wscript.echo("The end")
+
+   createObject("WScript.Shell").appActivate(app.caption)
+
+</script> </job>
